@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,7 +60,8 @@ fun ArchieWikiApp() {
     val view = LocalView.current
     val statusBarColor = MaterialTheme.colorScheme.background
 
-    SideEffect {
+
+    LaunchedEffect(statusBarColor) {
         val window = (view.context as ComponentActivity).window
 
         window.statusBarColor = statusBarColor.toArgb()
@@ -137,10 +139,10 @@ fun CustomBottomBar(
 
                 NavigationBarItem(
                     icon = {
-                        Icon(
-                            imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
-                            contentDescription = item.title
-                        )
+                        val iconVector = remember(selected, item) {
+                            if (selected) item.selectedIcon else item.unselectedIcon
+                        }
+                        Icon(imageVector = iconVector, contentDescription = item.title)
                     },
                     label = { Text(item.title) },
                     selected = selected,

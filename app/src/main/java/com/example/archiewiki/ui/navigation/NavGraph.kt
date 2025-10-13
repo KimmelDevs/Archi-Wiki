@@ -29,8 +29,8 @@ fun NavGraph(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier,
-        enterTransition = { fadeIn(animationSpec = tween(100)) },
-        exitTransition = { fadeOut(animationSpec = tween(100)) }
+        enterTransition = { fadeIn(animationSpec = tween(300)) },
+        exitTransition = { fadeOut(animationSpec = tween(300)) }
     ) {
 
         // Home Screen - Main dashboard with category cards

@@ -15,7 +15,6 @@ import com.example.archiewiki.ui.components.common.AppTopBar
 import com.example.archiewiki.ui.components.common.EmptyState
 import com.example.archiewiki.ui.components.common.LoadingIndicator
 import com.example.archiewiki.ui.screens.home.components.CategoryCard
-import com.example.archiewiki.ui.screens.home.components.WelcomeHeader
 import com.example.archiewiki.util.AppIcons
 import com.example.archiewiki.viewmodel.HomeViewModel
 import com.example.archiewiki.viewmodel.HomeUiState
@@ -97,9 +96,21 @@ private fun HomeContent(
         modifier = modifier.fillMaxSize()
     ) {
         // Welcome Header Component
-        WelcomeHeader(
-            modifier = Modifier.padding(16.dp)
-        )
+        Column(
+            modifier = modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Explore Building Elements",
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Discover materials, styles, and architectural components",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
 
         // Categories Grid
         LazyVerticalGrid(
@@ -109,13 +120,10 @@ private fun HomeContent(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxSize()
         ) {
-            items(categories) { category ->
-                // Using CategoryCard Component
-                CategoryCard(
-                    category = category,
-                    onClick = { onCategoryClick(category.id) }
-                )
+            items(categories, key = { it.id }) { category ->
+                CategoryCard(category = category, onClick = { onCategoryClick(category.id) })
             }
+
         }
     }
 }
