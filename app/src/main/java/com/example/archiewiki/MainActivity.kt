@@ -1,13 +1,19 @@
 package com.example.archiewiki
 
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -34,6 +40,29 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ArchieWikiApp() {
     val navController = rememberNavController()
+
+
+    val view = LocalView.current
+    val statusBarColor = MaterialTheme.colorScheme.background
+
+    SideEffect {
+        val window = (view.context as ComponentActivity).window
+
+        window.statusBarColor = statusBarColor.toArgb()
+        window.setBackgroundDrawable(ColorDrawable(statusBarColor.toArgb()))
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val lightStatusIcons = statusBarColor.luminance() > 0.5f
+            window.decorView.systemUiVisibility =
+                if (lightStatusIcons) {
+                    window.decorView.systemUiVisibility or
+                            android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                } else {
+                    window.decorView.systemUiVisibility and
+                            android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+                }
+        }
+    }
 
     Scaffold(
         bottomBar = {
