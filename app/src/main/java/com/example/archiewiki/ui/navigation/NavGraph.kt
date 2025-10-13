@@ -11,6 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
+import com.example.archiewiki.ui.screens.home.HomeScreen
+
 /**
  * Main navigation graph for the Buildings Wiki app
  *
@@ -33,11 +35,11 @@ fun NavGraph(
 
         // Home Screen - Main dashboard with category cards
         composable(route = Screen.Home.route) {
-            // HomeScreen(
-            //     onCategoryClick = { categoryId ->
-            //         navController.navigate(Screen.CategoryDetail.createRoute(categoryId))
-            //     }
-            // )
+            HomeScreen(
+                 onCategoryClick = { categoryId ->
+                     navController.navigate(Screen.CategoryDetail.createRoute(categoryId))
+                 }
+             )
 
             // Placeholder for now
             androidx.compose.material3.Text("Home Screen - Coming Soon")
