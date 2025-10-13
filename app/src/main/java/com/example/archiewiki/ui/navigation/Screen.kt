@@ -7,7 +7,7 @@ sealed class Screen(val route: String) {
 
     // Bottom Navigation Screens
     data object Home : Screen("home")
-    data object Search : Screen("search")
+    data object Eras : Screen("eras")
     data object Browse : Screen("browse")
     data object More : Screen("more")
 
@@ -27,6 +27,6 @@ sealed class Screen(val route: String) {
 
     companion object {
         // Helper function to get all bottom nav screens
-        fun getBottomNavScreens() = listOf(Home, Search, Browse, More)
+        fun getBottomNavScreens() = listOf(Home, Eras, Browse, More)
     }
 }

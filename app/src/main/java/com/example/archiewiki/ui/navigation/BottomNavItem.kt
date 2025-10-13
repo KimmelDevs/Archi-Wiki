@@ -2,10 +2,12 @@ package com.example.archiewiki.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.LightbulbCircle
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.LightbulbCircle
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Search
@@ -36,10 +38,10 @@ val bottomNavItems = listOf(
         screen = Screen.Home
     ),
     BottomNavItem(
-        title = "Search",
-        selectedIcon = Icons.Filled.Search,
-        unselectedIcon = Icons.Outlined.Search,
-        screen = Screen.Search
+        title = "Eras",
+        selectedIcon = Icons.Filled.LightbulbCircle,
+        unselectedIcon = Icons.Outlined.LightbulbCircle,
+        screen = Screen.Eras
     ),
     BottomNavItem(
         title = "Browse",

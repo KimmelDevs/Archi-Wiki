@@ -41,20 +41,16 @@ fun NavGraph(
                  }
              )
 
-            // Placeholder for now
-            androidx.compose.material3.Text("Home Screen - Coming Soon")
         }
 
         // Search Screen - Search functionality
-        composable(route = Screen.Search.route) {
+        composable(route = Screen.Eras.route) {
             // SearchScreen(
             //     onItemClick = { itemId ->
             //         navController.navigate(Screen.ItemDetail.createRoute(itemId))
             //     }
             // )
 
-            // Placeholder for now
-            androidx.compose.material3.Text("Search Screen - Coming Soon")
         }
 
         // Browse Screen - Alphabetical listing
@@ -65,8 +61,6 @@ fun NavGraph(
             //     }
             // )
 
-            // Placeholder for now
-            androidx.compose.material3.Text("Browse Screen - Coming Soon")
         }
 
         // More Screen - Settings, favorites, about
@@ -83,8 +77,6 @@ fun NavGraph(
             //     }
             // )
 
-            // Placeholder for now
-            androidx.compose.material3.Text("More Screen - Coming Soon")
         }
 
         // Category Detail Screen - Shows all items in a category
@@ -108,8 +100,6 @@ fun NavGraph(
             //     }
             // )
 
-            // Placeholder for now
-            androidx.compose.material3.Text("Category Detail: $categoryId - Coming Soon")
         }
 
         // Item Detail Screen - Shows detailed information about a specific item
@@ -133,8 +123,6 @@ fun NavGraph(
             //     }
             // )
 
-            // Placeholder for now
-            androidx.compose.material3.Text("Item Detail: $itemId - Coming Soon")
         }
 
         // Favorites Screen
@@ -148,8 +136,6 @@ fun NavGraph(
             //     }
             // )
 
-            // Placeholder for now
-            androidx.compose.material3.Text("Favorites Screen - Coming Soon")
         }
 
         // Settings Screen
@@ -160,8 +146,6 @@ fun NavGraph(
             //     }
             // )
 
-            // Placeholder for now
-            androidx.compose.material3.Text("Settings Screen - Coming Soon")
         }
 
         // About Screen
@@ -172,8 +156,6 @@ fun NavGraph(
             //     }
             // )
 
-            // Placeholder for now
-            androidx.compose.material3.Text("About Screen - Coming Soon")
         }
     }
 }
