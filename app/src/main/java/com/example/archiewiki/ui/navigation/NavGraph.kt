@@ -1,5 +1,6 @@
 package com.example.archiewiki.ui.navigation
 
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -7,12 +8,14 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.archiewiki.ui.screens.home.HomeScreen
 
 /**
  * Main navigation graph for the Buildings Wiki app
  *
  * @param navController The navigation controller to handle navigation
  * @param startDestination The initial screen to display (defaults to Home)
+ * @param modifier Modifier to be applied to the NavHost
  */
 @Composable
 fun NavGraph(
@@ -28,14 +31,11 @@ fun NavGraph(
 
         // Home Screen - Main dashboard with category cards
         composable(route = Screen.Home.route) {
-            // HomeScreen(
-            //     onCategoryClick = { categoryId ->
-            //         navController.navigate(Screen.CategoryDetail.createRoute(categoryId))
-            //     }
-            // )
-
-            // Placeholder for now
-            androidx.compose.material3.Text("Home Screen - Coming Soon")
+            HomeScreen(
+                onCategoryClick = { categoryId ->
+                    navController.navigate(Screen.CategoryDetail.createRoute(categoryId))
+                }
+            )
         }
 
         // Search Screen - Search functionality
@@ -47,7 +47,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            androidx.compose.material3.Text("Search Screen - Coming Soon")
+            Text("Search Screen - Coming Soon")
         }
 
         // Browse Screen - Alphabetical listing
@@ -59,7 +59,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            androidx.compose.material3.Text("Browse Screen - Coming Soon")
+            Text("Browse Screen - Coming Soon")
         }
 
         // More Screen - Settings, favorites, about
@@ -77,7 +77,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            androidx.compose.material3.Text("More Screen - Coming Soon")
+            Text("More Screen - Coming Soon")
         }
 
         // Category Detail Screen - Shows all items in a category
@@ -102,7 +102,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            androidx.compose.material3.Text("Category Detail: $categoryId - Coming Soon")
+            Text("Category Detail: $categoryId - Coming Soon")
         }
 
         // Item Detail Screen - Shows detailed information about a specific item
@@ -127,7 +127,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            androidx.compose.material3.Text("Item Detail: $itemId - Coming Soon")
+            Text("Item Detail: $itemId - Coming Soon")
         }
 
         // Favorites Screen
@@ -142,7 +142,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            androidx.compose.material3.Text("Favorites Screen - Coming Soon")
+            Text("Favorites Screen - Coming Soon")
         }
 
         // Settings Screen
@@ -154,7 +154,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            androidx.compose.material3.Text("Settings Screen - Coming Soon")
+            Text("Settings Screen - Coming Soon")
         }
 
         // About Screen
@@ -166,7 +166,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            androidx.compose.material3.Text("About Screen - Coming Soon")
+            Text("About Screen - Coming Soon")
         }
     }
 }
