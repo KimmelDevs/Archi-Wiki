@@ -3,6 +3,8 @@ package com.example.archiewiki.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.archiewiki.data.model.BuildingCategory
+import com.example.archiewiki.data.repository.BuildingRepository
+import com.example.archiewiki.data.repository.BuildingRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +14,9 @@ import kotlinx.coroutines.launch
  * ViewModel for the Home screen
  * Manages the list of building categories and their state
  */
-class HomeViewModel : ViewModel() {
+class HomeViewModel(
+    private val repository: BuildingRepository = BuildingRepositoryImpl()
+) : ViewModel() {
 
     // UI State
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
@@ -34,11 +38,7 @@ class HomeViewModel : ViewModel() {
             _uiState.value = HomeUiState.Loading
 
             try {
-                // TODO: Replace with repository call
-                // val categories = repository.getAllCategories()
-
-                // For now, using empty list - will populate with SampleData later
-                val categories = emptyList<BuildingCategory>()
+                val categories = repository.getAllCategories()
 
                 _categories.value = categories
                 _uiState.value = if (categories.isEmpty()) {

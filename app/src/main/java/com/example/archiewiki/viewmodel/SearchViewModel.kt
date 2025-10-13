@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.archiewiki.data.model.BuildingItem
 import com.example.archiewiki.data.model.CategoryType
+import com.example.archiewiki.data.repository.BuildingRepository
+import com.example.archiewiki.data.repository.BuildingRepositoryImpl
+import com.example.archiewiki.util.Constants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +18,9 @@ import kotlinx.coroutines.delay
  * ViewModel for the Search screen
  * Manages search query, filters, and search results
  */
-class SearchViewModel : ViewModel() {
+class SearchViewModel(
+    private val repository: BuildingRepository = BuildingRepositoryImpl()
+) : ViewModel() {
 
     // Search query
     private val _searchQuery = MutableStateFlow("")
@@ -39,6 +44,10 @@ class SearchViewModel : ViewModel() {
 
     private var searchJob: Job? = null
 
+    init {
+        loadRecentSearches()
+    }
+
     /**
      * Update search query
      */
@@ -56,7 +65,7 @@ class SearchViewModel : ViewModel() {
 
         // Debounce search
         searchJob = viewModelScope.launch {
-            delay(300) // Wait 300ms before searching
+            delay(Constants.Search.DEBOUNCE_DELAY)
             performSearch(query)
         }
     }
@@ -69,10 +78,7 @@ class SearchViewModel : ViewModel() {
             _uiState.value = SearchUiState.Searching
 
             try {
-                // TODO: Replace with repository call
-                // val results = repository.searchItems(query, _selectedCategory.value)
-
-                val results = emptyList<BuildingItem>() // Placeholder
+                val results = repository.searchItems(query, _selectedCategory.value)
 
                 _searchResults.value = results
                 _uiState.value = if (results.isEmpty()) {
@@ -114,17 +120,34 @@ class SearchViewModel : ViewModel() {
      * Add query to recent searches
      */
     private fun addToRecentSearches(query: String) {
-        val current = _recentSearches.value.toMutableList()
-        current.remove(query) // Remove if exists
-        current.add(0, query) // Add to beginning
-        _recentSearches.value = current.take(10) // Keep last 10
+        viewModelScope.launch {
+            repository.addRecentSearch(query)
+            loadRecentSearches()
+        }
+    }
+
+    /**
+     * Load recent searches from repository
+     */
+    private fun loadRecentSearches() {
+        viewModelScope.launch {
+            try {
+                val searches = repository.getRecentSearches()
+                _recentSearches.value = searches
+            } catch (e: Exception) {
+                // Ignore errors loading recent searches
+            }
+        }
     }
 
     /**
      * Clear recent searches
      */
     fun clearRecentSearches() {
-        _recentSearches.value = emptyList()
+        viewModelScope.launch {
+            repository.clearRecentSearches()
+            _recentSearches.value = emptyList()
+        }
     }
 }
 

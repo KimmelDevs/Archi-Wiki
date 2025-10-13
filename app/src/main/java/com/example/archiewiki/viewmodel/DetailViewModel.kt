@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.archiewiki.data.model.BuildingItem
 import com.example.archiewiki.data.model.ItemDetail
+import com.example.archiewiki.data.model.Specification
+import com.example.archiewiki.data.repository.BuildingRepository
+import com.example.archiewiki.data.repository.BuildingRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +16,9 @@ import kotlinx.coroutines.launch
  * ViewModel for the Item Detail screen
  * Manages detailed information about a specific building item
  */
-class DetailViewModel : ViewModel() {
+class DetailViewModel(
+    private val repository: BuildingRepository = BuildingRepositoryImpl()
+) : ViewModel() {
 
     // Current item
     private val _item = MutableStateFlow<BuildingItem?>(null)
@@ -47,26 +52,20 @@ class DetailViewModel : ViewModel() {
             _uiState.value = DetailUiState.Loading
 
             try {
-                // TODO: Replace with repository calls
-                // val item = repository.getItemById(itemId)
-                // val detail = repository.getItemDetail(itemId)
-                // val relatedItems = repository.getRelatedItems(item.relatedItemIds)
-                // val isFav = repository.isFavorite(itemId)
+                val item = repository.getItemById(itemId)
+                val detail = repository.getItemDetail(itemId)
+                val relatedItems = repository.getRelatedItems(itemId)
+                val isFav = repository.isFavorite(itemId)
 
-                val item: BuildingItem? = null // Placeholder
-                val detail: ItemDetail? = null // Placeholder
-                val relatedItems = emptyList<BuildingItem>() // Placeholder
-                val isFav = false
+                if (item != null) {
+                    _item.value = item
+                    _itemDetail.value = detail
+                    _relatedItems.value = relatedItems
+                    _isFavorite.value = isFav
 
-                _item.value = item
-                _itemDetail.value = detail
-                _relatedItems.value = relatedItems
-                _isFavorite.value = isFav
-
-                _uiState.value = when {
-                    item == null -> DetailUiState.Error("Item not found")
-                    detail == null -> DetailUiState.Error("Details not found")
-                    else -> DetailUiState.Success
+                    _uiState.value = DetailUiState.Success
+                } else {
+                    _uiState.value = DetailUiState.Error("Item not found")
                 }
             } catch (e: Exception) {
                 _uiState.value = DetailUiState.Error(e.message ?: "Failed to load details")
@@ -83,16 +82,17 @@ class DetailViewModel : ViewModel() {
                 val itemId = _item.value?.id ?: return@launch
                 val newState = !_isFavorite.value
 
-                // TODO: Update repository
-                // if (newState) {
-                //     repository.addToFavorites(itemId)
-                // } else {
-                //     repository.removeFromFavorites(itemId)
-                // }
+                val success = if (newState) {
+                    repository.addToFavorites(itemId)
+                } else {
+                    repository.removeFromFavorites(itemId)
+                }
 
-                _isFavorite.value = newState
+                if (success) {
+                    _isFavorite.value = newState
+                }
             } catch (e: Exception) {
-                // Handle error
+                // Handle error - could show snackbar
             }
         }
     }
@@ -108,7 +108,7 @@ class DetailViewModel : ViewModel() {
     /**
      * Get specifications grouped by category
      */
-    fun getGroupedSpecifications(): Map<String, List<com.example.archiewiki.data.model.Specification>> {
+    fun getGroupedSpecifications(): Map<String, List<Specification>> {
         return _itemDetail.value?.getSpecsByCategory() ?: emptyMap()
     }
 

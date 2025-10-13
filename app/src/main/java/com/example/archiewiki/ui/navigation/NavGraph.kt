@@ -1,8 +1,7 @@
 package com.example.archiewiki.ui.navigation
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHost
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -18,11 +17,13 @@ import androidx.navigation.navArgument
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    startDestination: String = Screen.Home.route
+    startDestination: String = Screen.Home.route,
+    modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = startDestination,
+        modifier = modifier
     ) {
 
         // Home Screen - Main dashboard with category cards
@@ -34,7 +35,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            Text("Home Screen - Coming Soon")
+            androidx.compose.material3.Text("Home Screen - Coming Soon")
         }
 
         // Search Screen - Search functionality
@@ -46,7 +47,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            Text("Search Screen - Coming Soon")
+            androidx.compose.material3.Text("Search Screen - Coming Soon")
         }
 
         // Browse Screen - Alphabetical listing
@@ -58,7 +59,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            Text("Browse Screen - Coming Soon")
+            androidx.compose.material3.Text("Browse Screen - Coming Soon")
         }
 
         // More Screen - Settings, favorites, about
@@ -76,7 +77,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            Text("More Screen - Coming Soon")
+            androidx.compose.material3.Text("More Screen - Coming Soon")
         }
 
         // Category Detail Screen - Shows all items in a category
@@ -101,7 +102,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            Text("Category Detail: $categoryId - Coming Soon")
+            androidx.compose.material3.Text("Category Detail: $categoryId - Coming Soon")
         }
 
         // Item Detail Screen - Shows detailed information about a specific item
@@ -126,7 +127,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            Text("Item Detail: $itemId - Coming Soon")
+            androidx.compose.material3.Text("Item Detail: $itemId - Coming Soon")
         }
 
         // Favorites Screen
@@ -141,7 +142,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            Text("Favorites Screen - Coming Soon")
+            androidx.compose.material3.Text("Favorites Screen - Coming Soon")
         }
 
         // Settings Screen
@@ -153,7 +154,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            Text("Settings Screen - Coming Soon")
+            androidx.compose.material3.Text("Settings Screen - Coming Soon")
         }
 
         // About Screen
@@ -165,7 +166,7 @@ fun NavGraph(
             // )
 
             // Placeholder for now
-            Text("About Screen - Coming Soon")
+            androidx.compose.material3.Text("About Screen - Coming Soon")
         }
     }
 }

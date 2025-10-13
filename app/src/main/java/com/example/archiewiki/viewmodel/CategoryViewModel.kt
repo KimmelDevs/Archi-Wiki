@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.archiewiki.data.model.BuildingCategory
 import com.example.archiewiki.data.model.BuildingItem
+import com.example.archiewiki.data.model.CategoryType
+import com.example.archiewiki.data.repository.BuildingRepository
+import com.example.archiewiki.data.repository.BuildingRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +16,9 @@ import kotlinx.coroutines.launch
  * ViewModel for the Category Detail screen
  * Manages a specific category and its items
  */
-class CategoryViewModel : ViewModel() {
+class CategoryViewModel(
+    private val repository: BuildingRepository = BuildingRepositoryImpl()
+) : ViewModel() {
 
     // Current category
     private val _category = MutableStateFlow<BuildingCategory?>(null)
@@ -43,21 +48,22 @@ class CategoryViewModel : ViewModel() {
             _uiState.value = CategoryUiState.Loading
 
             try {
-                // TODO: Replace with repository calls
-                // val category = repository.getCategoryById(categoryId)
-                // val items = repository.getItemsByCategory(category.type)
+                val category = repository.getCategoryById(categoryId)
 
-                val category: BuildingCategory? = null // Placeholder
-                val items = emptyList<BuildingItem>() // Placeholder
+                if (category != null) {
+                    val items = repository.getItemsByCategory(category.type)
 
-                _category.value = category
-                _items.value = items
-                applyFilters()
+                    _category.value = category
+                    _items.value = items
+                    applyFilters()
 
-                _uiState.value = when {
-                    category == null -> CategoryUiState.Error("Category not found")
-                    items.isEmpty() -> CategoryUiState.Empty
-                    else -> CategoryUiState.Success
+                    _uiState.value = if (items.isEmpty()) {
+                        CategoryUiState.Empty
+                    } else {
+                        CategoryUiState.Success
+                    }
+                } else {
+                    _uiState.value = CategoryUiState.Error("Category not found")
                 }
             } catch (e: Exception) {
                 _uiState.value = CategoryUiState.Error(e.message ?: "Failed to load category")

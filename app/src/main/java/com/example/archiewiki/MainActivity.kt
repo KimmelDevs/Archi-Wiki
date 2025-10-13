@@ -1,60 +1,85 @@
 package com.example.archiewiki
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.MoreVert
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.List
-import androidx.compose.ui.graphics.vector.ImageVector
-import com.example.archiewiki.ui.navigation.Screen
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.example.archiewiki.ui.navigation.NavGraph
+import com.example.archiewiki.ui.navigation.bottomNavItems
+import com.example.archiewiki.ui.theme.BuildingsWikiTheme
 
 /**
- * Data class representing a bottom navigation item
- * @param title The label shown in the bottom navigation
- * @param selectedIcon Icon displayed when this item is selected
- * @param unselectedIcon Icon displayed when this item is not selected
- * @param screen The navigation screen associated with this item
+ * Main Activity - Entry point of the Archie Wiki app
+ * Sets up navigation and bottom navigation bar
  */
-data class BottomNavItem(
-    val title: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val screen: Screen
-)
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            BuildingsWikiTheme {
+                ArchieWikiApp()
+            }
+        }
+    }
+}
 
-/**
- * List of all bottom navigation items
- */
-val bottomNavItems = listOf(
-    BottomNavItem(
-        title = "Home",
-        selectedIcon = Icons.Filled.Home,
-        unselectedIcon = Icons.Outlined.Home,
-        screen = Screen.Home
-    ),
-    BottomNavItem(
-        title = "Search",
-        selectedIcon = Icons.Filled.Search,
-        unselectedIcon = Icons.Outlined.Search,
-        screen = Screen.Search
-    ),
-    BottomNavItem(
-        title = "Browse",
-        selectedIcon = Icons.Filled.List,
-        unselectedIcon = Icons.Outlined.List,
-        screen = Screen.Browse
-    ),
-    BottomNavItem(
-        title = "More",
-        selectedIcon = Icons.Filled.MoreVert,
-        unselectedIcon = Icons.Outlined.MoreVert,
-        screen = Screen.More
-    )
-)
+@Composable
+fun ArchieWikiApp() {
+    val navController = rememberNavController()
 
-// Note: Icons are now using List icons for Browse
-// All icons are from the standard Material Icons library
+    Scaffold(
+        bottomBar = {
+            NavigationBar {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
+
+                bottomNavItems.forEach { item ->
+                    NavigationBarItem(
+                        icon = {
+                            Icon(
+                                imageVector = if (currentDestination?.hierarchy?.any {
+                                        it.route == item.screen.route
+                                    } == true) {
+                                    item.selectedIcon
+                                } else {
+                                    item.unselectedIcon
+                                },
+                                contentDescription = item.title
+                            )
+                        },
+                        label = { Text(item.title) },
+                        selected = currentDestination?.hierarchy?.any {
+                            it.route == item.screen.route
+                        } == true,
+                        onClick = {
+                            navController.navigate(item.screen.route) {
+                                // Pop up to the start destination of the graph to
+                                // avoid building up a large stack of destinations
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                // Avoid multiple copies of the same destination
+                                launchSingleTop = true
+                                // Restore state when reselecting a previously selected item
+                                restoreState = true
+                            }
+                        }
+                    )
+                }
+            }
+        }
+    ) { innerPadding ->
+        NavGraph(
+            navController = navController,
+            modifier = Modifier.padding(innerPadding)
+        )
+    }
+}

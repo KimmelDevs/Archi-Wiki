@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.archiewiki.data.model.BuildingItem
 import com.example.archiewiki.data.model.CategoryType
+import com.example.archiewiki.data.repository.BuildingRepository
+import com.example.archiewiki.data.repository.BuildingRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +15,9 @@ import kotlinx.coroutines.launch
  * ViewModel for the Browse screen
  * Manages alphabetical listing and filtering of all building items
  */
-class BrowseViewModel : ViewModel() {
+class BrowseViewModel(
+    private val repository: BuildingRepository = BuildingRepositoryImpl()
+) : ViewModel() {
 
     // All items
     private val _allItems = MutableStateFlow<List<BuildingItem>>(emptyList())
@@ -47,10 +51,7 @@ class BrowseViewModel : ViewModel() {
             _uiState.value = BrowseUiState.Loading
 
             try {
-                // TODO: Replace with repository call
-                // val items = repository.getAllItems()
-
-                val items = emptyList<BuildingItem>() // Placeholder
+                val items = repository.getAllItems()
 
                 _allItems.value = items
                 applyFilters()
