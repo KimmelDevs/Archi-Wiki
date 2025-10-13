@@ -1,5 +1,8 @@
 package com.example.archiewiki.ui.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -23,7 +26,9 @@ fun NavGraph(
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        modifier = modifier
+        modifier = modifier,
+        enterTransition = { fadeIn(animationSpec = tween(100)) },
+        exitTransition = { fadeOut(animationSpec = tween(100)) }
     ) {
 
         // Home Screen - Main dashboard with category cards
