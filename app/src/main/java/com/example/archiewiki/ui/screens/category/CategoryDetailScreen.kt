@@ -1,4 +1,4 @@
-package com.example.archiewiki.ui.screens.category.components
+package com.example.archiewiki.ui.screens.category
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn

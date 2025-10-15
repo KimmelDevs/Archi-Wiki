@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
+import com.example.archiewiki.ui.screens.category.CategoryDetailScreen
 import com.example.archiewiki.ui.screens.home.HomeScreen
 
 /**
@@ -90,15 +91,15 @@ fun NavGraph(
         ) { backStackEntry ->
             val categoryId = backStackEntry.arguments?.getString("categoryId")
 
-            // CategoryDetailScreen(
-            //     categoryId = categoryId ?: "",
-            //     onItemClick = { itemId ->
-            //         navController.navigate(Screen.ItemDetail.createRoute(itemId))
-            //     },
-            //     onBackClick = {
-            //         navController.navigateUp()
-            //     }
-            // )
+             CategoryDetailScreen(
+                 categoryId = categoryId ?: "",
+                 onItemClick = { itemId ->
+                     navController.navigate(Screen.ItemDetail.createRoute(itemId))
+                 },
+                 onBackClick = {
+                     navController.navigateUp()
+                 }
+             )
 
         }
 
